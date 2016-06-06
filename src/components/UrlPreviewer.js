@@ -31,7 +31,6 @@ export default class UrlPreviewer extends Component {
       const containerWidth = this.state.width;
       
       if(!containerWidth && imageUri){
-          console.warn('1');
           Image.getSize(imageUri, (width, height) => {
             this.setState({
                 image: {
@@ -44,9 +43,7 @@ export default class UrlPreviewer extends Component {
       }
       
       if(containerWidth && imageUri){
-          console.warn('2');
           Image.getSize(imageUri, (width, height) => {
-            console.warn(width + " : " + height);
             this.setState({
                 height: containerWidth * height / width,
                 image: {

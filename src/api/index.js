@@ -12,7 +12,7 @@ const SPORTS_RU_NAME = 'Sports.ru';
 
 
 const youtubeChannelIdExp = new RegExp('^\/channel\/(.+)$');
-const youtubeUserNameExp = new RegExp('^\/user\/(.+)\/.*$');
+const youtubeUserNameExp = new RegExp('^\/user\/(.+)\/(.*)$');
 const youtubeHostnameExp = new RegExp('^(([w]{3}\.)?(youtube\.[a-z]{2,5}))$');
 const sportsHostnameExp = new RegExp('^(([w]{3}\.)?(sports\.ru))$');
 
@@ -39,11 +39,11 @@ const getYoutubePreview = (url) => {
     }
     
     if(url.pathname.indexOf('channel') > -1){
-        return getYoutubeChannelPreview(youtubeChannelIdExp.exec(url.pathname)[1]);
+        return getYoutubeChannelPreview(url.pathname.split('/')[2]);
     }
     
     if(url.pathname.indexOf('user') > -1){
-        return getYoutubeUserPreview(youtubeUserNameExp.exec(url.pathname)[1]);
+        return getYoutubeUserPreview(url.pathname.split('/')[2]);
     }
     
     return getYoutubePreviewWithoutImage(url);
