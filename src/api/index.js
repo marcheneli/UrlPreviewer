@@ -10,6 +10,7 @@ const YOUTUBE_NAME = 'YouTube';
 const SPORTS_RU_LOGO_URL = 'http://www.sports.ru/apple-touch-icon-76.png';
 const SPORTS_RU_NAME = 'Sports.ru';
 
+const urlExp = new RegExp('^(http(s)?(:\/\/))?(www\.)?[a-zA-Z0-9-_\.]+([-a-zA-Z0-9:%_\+.~#?&//=]*)');
 
 const youtubeChannelIdExp = new RegExp('^\/channel\/(.+)$');
 const youtubeUserNameExp = new RegExp('^\/user\/(.+)\/(.*)$');
@@ -18,9 +19,13 @@ const sportsHostnameExp = new RegExp('^(([w]{3}\.)?(sports\.ru))$');
 
 export default (urlStr) => {
     
-    const url = URL.parse(urlStr, true);
+    checkUrl(urlStr);
     
-    return fetch(urlStr).then(() => {
+    const urlWithProtocolName = getUrlWithProtocolName(urlStr);
+    
+    const url = URL.parse(urlWithProtocolName, true);
+    
+    return fetch(urlWithProtocolName).then(() => {
         if(sportsHostnameExp.test(url.hostname)){
             return getSportsPreview(url);
         }
@@ -30,7 +35,21 @@ export default (urlStr) => {
         }
         
         return null;
-    })
+    });
+}
+
+const checkUrl = (urlStr) => {
+    if(!urlExp.test(urlStr)){
+        throw 'Error';
+    }
+}
+
+const getUrlWithProtocolName = (urlStr) => {
+    if(urlStr.indexOf('http://') !== 0 && urlStr.indexOf('https://') !== 0){
+        return 'http://' + urlStr;
+    }
+    
+    return urlStr;
 }
 
 const getYoutubePreview = (url) => {
